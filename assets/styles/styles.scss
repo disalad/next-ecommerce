@@ -1,0 +1,25 @@
+@use 'main';
+@use 'variables' as var;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --foreground: var.$foreground-dark;
+        --background: var.$background-dark;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --foreground: var.$foreground-light;
+        --background: var.$background-light;
+    }
+}
+
+body {
+    color: var(--foreground);
+    background: var(--background);
+}

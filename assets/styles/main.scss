@@ -1,0 +1,11 @@
+// @import url(./vartiables.scss);
+@use 'variables' as var;
+
+html,
+body {
+    overflow-x: hidden !important;
+}
+
+body {
+    font-family: var(--main-font), 'DM Sans', serif;
+}
