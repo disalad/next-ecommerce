@@ -12,6 +12,7 @@ export default function RootLayout({ children }) {
         <html lang='en'>
             <body>
                 <Header />
+                <div style={{ height: '95px' }}></div>
                 {children}
                 <Footer />
             </body>

@@ -1,0 +1,21 @@
+@use 'variables' as var;
+
+@mixin breakpoint($screen) {
+    @if $screen == phone-sm {
+        @media (min-width: var.$phone-sm) {
+            @content;
+        }
+    } @else if $screen == phone {
+        @media (min-width: var.$phone) {
+            @content;
+        }
+    } @else if $screen == tablet-lg {
+        @media (min-width: var.$tablet-lg) {
+            @content;
+        }
+    } @else if $screen == desktop-lg {
+        @media (min-width: var.$desktop-lg) {
+            @content;
+        }
+    }
+}
