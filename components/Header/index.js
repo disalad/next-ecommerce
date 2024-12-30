@@ -67,7 +67,7 @@ const Header = () => {
                         </Link>
                     </button>
                     <button className='hover:text-gray-900'>
-                        <Link href='/auth/login'>
+                        <Link href='/login'>
                             <FiUser size={21} />{' '}
                         </Link>
                     </button>

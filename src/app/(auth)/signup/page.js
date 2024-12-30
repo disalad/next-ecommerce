@@ -1,16 +1,24 @@
 import { FaFacebookF } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
+import Link from 'next/link';
 
-function Login() {
+function Signup() {
     return (
         <div className='flex items-center justify-center min-h-screen bg-gray-200 pt-16 pb-20'>
             <div className='w-full max-w-lg px-10 py-14 bg-white shadow-none border border-gray-200 rounded-2xl'>
-                <h2 className='text-2xl font-bold text-center mb-10'>Log in</h2>
+                <h2 className='text-2xl font-bold text-center mb-10'>Sign Up</h2>
                 <form>
                     <div className='mb-6'>
                         <input
+                            type='text'
+                            placeholder='Full Name'
+                            className='signin__button text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-300'
+                        />
+                    </div>
+                    <div className='mb-6'>
+                        <input
                             type='email'
-                            placeholder='email'
+                            placeholder='Email'
                             className='signin__button text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-300'
                         />
                     </div>
@@ -21,17 +29,12 @@ function Login() {
                             className='signin__button text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-300'
                         />
                     </div>
-                    <div className='flex items-center justify-between mb-8 px-2'>
-                        <label className='flex items-center'>
-                            <input
-                                type='checkbox'
-                                className='w-4 h-4 text-indigo-500 border-gray-300 rounded focus:ring-2 focus:ring-indigo-500'
-                            />
-                            <span className='ml-2 text-sm text-gray-600'>Keep me signed in</span>
-                        </label>
-                        <a href='#' className='text-sm text-indigo-500 hover:underline'>
-                            Forgot password?
-                        </a>
+                    <div className='mb-6'>
+                        <input
+                            type='password'
+                            placeholder='Confirm Password'
+                            className='signin__button text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-300'
+                        />
                     </div>
                     <div className='flex justify-between gap-4 mb-6'>
                         <button
@@ -51,18 +54,18 @@ function Login() {
                         type='submit'
                         className='signin__button text-white bg-yellow-500 signin__button shadow hover:bg-yellow-600'
                     >
-                        Sign in
+                        Sign Up
                     </button>
                 </form>
                 <p className='mt-4 text-center text-sm text-gray-600'>
-                    Not a member yet?{' '}
-                    <a href='#' className='text-indigo-500 hover:underline'>
-                        Sign up
-                    </a>
+                    Already have an account?{' '}
+                    <Link href='/login' className='text-indigo-500 hover:underline'>
+                        Log in
+                    </Link>
                 </p>
             </div>
         </div>
     );
 }
 
-export default Login;
+export default Signup;
