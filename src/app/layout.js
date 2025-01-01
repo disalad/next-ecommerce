@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { SessionProvider } from 'next-auth/react';
 import '@/styles/styles.scss';
 
 export const metadata = {
@@ -11,10 +12,12 @@ export default function RootLayout({ children }) {
     return (
         <html lang='en'>
             <body>
-                <Header />
-                <div style={{ height: '95px' }}></div>
-                {children}
-                <Footer />
+                <SessionProvider>
+                    <Header />
+                    <div style={{ height: '95px' }}></div>
+                    {children}
+                    <Footer />
+                </SessionProvider>
             </body>
         </html>
     );

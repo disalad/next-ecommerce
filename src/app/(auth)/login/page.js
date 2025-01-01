@@ -1,30 +1,46 @@
+'use client';
+
 import { FaFacebookF } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import Link from 'next/link';
+import { logInUserCredentials } from '@/lib/auth/authAction';
 
 function Login() {
+    const handleLogIn = async ev => {
+        ev.preventDefault();
+        const formData = new FormData(ev.target);
+        const data = Object.fromEntries(formData.entries());
+        await logInUserCredentials(data);
+    };
+
     return (
         <div className='flex items-center justify-center min-h-screen bg-gray-200 pt-16 pb-20'>
             <div className='w-full max-w-lg px-10 py-14 bg-white shadow-none border border-gray-200 rounded-2xl'>
                 <h2 className='text-2xl font-bold text-center mb-10'>Log in</h2>
-                <form>
+                <form onSubmit={handleLogIn}>
                     <div className='mb-6'>
                         <input
+                            name='email'
                             type='email'
                             placeholder='email'
                             className='signin__button text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-300'
+                            required
                         />
                     </div>
                     <div className='mb-6'>
                         <input
+                            name='password'
                             type='password'
                             placeholder='Password'
                             className='signin__button text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-300'
+                            required
                         />
                     </div>
                     <div className='flex items-center justify-between mb-8 px-2'>
                         <label className='flex items-center'>
                             <input
+                                name='rememberMe'
+                                defaultValue={true}
                                 type='checkbox'
                                 className='w-4 h-4 text-indigo-500 border-gray-300 rounded focus:ring-2 focus:ring-indigo-500'
                             />

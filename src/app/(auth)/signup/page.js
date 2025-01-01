@@ -1,39 +1,57 @@
+'use client';
+
 import { FaFacebookF } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import Link from 'next/link';
+import { signupUserCredentials } from '@/lib/auth/authAction';
 
 function Signup() {
+    const handleSignUp = async ev => {
+        ev.preventDefault();
+        const formData = new FormData(ev.target);
+        const data = Object.fromEntries(formData.entries());
+        await signupUserCredentials(data);
+    };
+
     return (
         <div className='flex items-center justify-center min-h-screen bg-gray-200 pt-16 pb-20'>
             <div className='w-full max-w-lg px-10 py-14 bg-white shadow-none border border-gray-200 rounded-2xl'>
                 <h2 className='text-2xl font-bold text-center mb-10'>Sign Up</h2>
-                <form>
+                <form onSubmit={handleSignUp}>
                     <div className='mb-6'>
                         <input
                             type='text'
+                            name='fullName'
                             placeholder='Full Name'
                             className='signin__button text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-300'
+                            required
                         />
                     </div>
                     <div className='mb-6'>
                         <input
                             type='email'
+                            name='email'
                             placeholder='Email'
                             className='signin__button text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-300'
+                            required
                         />
                     </div>
                     <div className='mb-6'>
                         <input
                             type='password'
+                            name='password'
                             placeholder='Password'
                             className='signin__button text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-300'
+                            required
                         />
                     </div>
                     <div className='mb-6'>
                         <input
                             type='password'
+                            name='confirmPassword'
                             placeholder='Confirm Password'
                             className='signin__button text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-300'
+                            required
                         />
                     </div>
                     <div className='flex justify-between gap-4 mb-6'>
