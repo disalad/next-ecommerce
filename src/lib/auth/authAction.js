@@ -1,50 +1,44 @@
 'use server';
+
 import { signIn } from '@/auth';
+import { validateLogInData, validateSignUpData } from './validate';
 
 export const signupUserCredentials = async data => {
-    const { fullName, email, password, confirmPassword } = data;
-    console.log('data: ', data);
+    const { _fullName, email, password, _confirmPassword } = data;
 
     // Validate the sign-up data
+    const validatedData = validateSignUpData(data);
 
-    try {
-        const result = await signIn('credentials', {
-            email,
-            password,
-            redirect: false,
-        });
+    // Call the NextAuth sign-in
+    const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false, // Prevent automatic redirection
+    });
 
-        if (result.error) {
-            throw new Error('Sign-in error:', result.error);
-        } else {
-            console.log('Sign-in successful:', result);
-            // Handle post-login logic (Navigate to the dashboard)
-        }
-    } catch (error) {
-        throw new Error('An unexpected error occurred:', error);
+    if (result.error || validatedData.message) {
+        const error = validatedData.message || result.error;
+        return { success: false, message: error, result: null };
     }
+    return { success: true, message: 'Log-in successful!', result };
 };
 
 export const logInUserCredentials = async data => {
-    const { email, password, rememberMe } = data;
-    console.log('data: ', data);
+    const { email, password } = data;
 
-    // Validate the login-up data
+    // Validate login data
+    const validatedData = validateLogInData(data);
 
-    try {
-        const result = await signIn('credentials', {
-            email,
-            password,
-            redirect: false,
-        });
+    // Call the NextAuth sign-in
+    const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false, // Prevent automatic redirection
+    });
 
-        if (result.error) {
-            throw new Error('Log-in error:', result.error);
-        } else {
-            console.log('Log-in successful:', result);
-            // Handle post-login logic (Navigate to the dashboard)
-        }
-    } catch (error) {
-        throw new Error('An unexpected error occurred:', error);
+    if (result.error || validatedData.message) {
+        const error = validatedData.message || result.error;
+        return { success: false, message: error, result: null };
     }
+    return { success: true, message: 'Log-in successful!', result };
 };

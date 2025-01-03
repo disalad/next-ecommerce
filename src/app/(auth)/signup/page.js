@@ -4,13 +4,21 @@ import { FaFacebookF } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import Link from 'next/link';
 import { signupUserCredentials } from '@/lib/auth/authAction';
+import { useAlertBox } from '@/context/AlertBoxContext';
 
 function Signup() {
+    const { showAlert } = useAlertBox();
+
     const handleSignUp = async ev => {
         ev.preventDefault();
+        // Get form data
         const formData = new FormData(ev.target);
         const data = Object.fromEntries(formData.entries());
-        await signupUserCredentials(data);
+        // Log in user
+        const { success, message, _result } = await signupUserCredentials(data);
+        console.log({ success, message });
+        // Notify user of the success or error
+        success ? showAlert(message, 'success') : showAlert(message, 'error');
     };
 
     return (
