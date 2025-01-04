@@ -1,0 +1,8 @@
+{
+    "tabWidth": 4,
+    "useTabs": false,
+    "printWidth": 80,
+    "proseWrap": "always",
+    "singleQuote": true,
+    "jsxSingleQuote": true
+}
