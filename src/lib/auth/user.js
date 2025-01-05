@@ -11,17 +11,19 @@ export const authorizeUser = async (credentials) => {
     const { name, email, password, callbackUrl } = credentials;
 
     await dbConnect();
-
     const foundUser = await User.findOne({ email: email }); // Find a user with the email
-    const passwordMatch = await bcrypt.compare(password, foundUser.password); // Compare the password
+    const passwordMatch = foundUser
+        ? await bcrypt.compare(password, foundUser.password) // Compare the password
+        : null;
 
     const fromLogin = callbackUrl.includes('login'); // Check if the request is from the login page
-
     if (foundUser && passwordMatch && fromLogin) {
         console.log('Found user: ', foundUser);
         return foundUser; // If the user is found, return the user
     } else if (foundUser && !passwordMatch && fromLogin) {
         throw new Error('Password does not match'); // Throw an error if the password does not match
+    } else if (!foundUser && fromLogin) {
+        throw new Error('User not found'); // Throw an error if the user is not found
     } else if (foundUser && passwordMatch && !fromLogin) {
         throw new Error('User already exists'); // Throw an error if the user already exists
     }
