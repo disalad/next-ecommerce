@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
 import dbConnect from '@/lib/db/mongodb';
 import User from '@/models/User';
-
-// This function implements the behavior: If the user is found,
-// the function will return the existing user. If the user is not found,
-// the function will create a new user. This function is used in the `authorize` property
-// of the Credentials provider in the auth object.
+import {
+    MemberNotFoundError,
+    InvalidCredentialsError,
+    MemberAlreadyExistsError,
+} from '@/lib/auth/errors';
 
 export const authorizeUser = async (credentials) => {
     const { name, email, password, callbackUrl } = credentials;
@@ -13,19 +13,19 @@ export const authorizeUser = async (credentials) => {
     await dbConnect();
     const foundUser = await User.findOne({ email: email }); // Find a user with the email
     const passwordMatch = foundUser
-        ? await bcrypt.compare(password, foundUser.password) // Compare the password
+        ? await bcrypt.compare(password, foundUser.password)
         : null;
 
-    const fromLogin = callbackUrl.includes('login'); // Check if the request is from the login page
+    const fromLogin = callbackUrl.includes('login');
     if (foundUser && passwordMatch && fromLogin) {
         console.log('Found user: ', foundUser);
         return foundUser; // If the user is found, return the user
     } else if (foundUser && !passwordMatch && fromLogin) {
-        throw new Error('Password does not match'); // Throw an error if the password does not match
+        throw new InvalidCredentialsError('Invalid credentials'); // If the password does not match, throw an error
     } else if (!foundUser && fromLogin) {
-        throw new Error('User not found'); // Throw an error if the user is not found
-    } else if (foundUser && passwordMatch && !fromLogin) {
-        throw new Error('User already exists'); // Throw an error if the user already exists
+        throw new MemberNotFoundError('Member not found'); // If the user is not found, throw an error
+    } else if (foundUser && !fromLogin) {
+        throw new MemberAlreadyExistsError('Member already exists'); // If the user already exists, throw an error
     }
 
     // Hash the password to create a new user
