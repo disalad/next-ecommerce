@@ -33,46 +33,49 @@ export const logInUserCredentials = async (data) => {
     const { email, password } = data;
 
     // Validate login data
-    const validatedData = validateLogInData(data);
+    const validationResult = validateLogInData(data);
+    if (validationResult.message) {
+        return {
+            success: false,
+            message: validationResult.message,
+            result: null,
+        };
+    }
 
-    // Call the NextAuth sign-in
     try {
-        await signIn('credentials', {
+        // Attempt to sign in with credentials
+        const result = await signIn('credentials', {
             email,
             password,
-            redirect: false, // Prevent automatic redirection
+            redirect: false,
         });
-    } catch (error) {
-        if (error instanceof InvalidCredentialsError) {
-            return {
-                success: false,
-                message: 'Invalid email or password.',
-                result: null,
-            };
-        } else if (error instanceof MemberNotFoundError) {
-            return {
-                success: false,
-                message: 'Member not found.',
-                result: null,
-            };
-        } else if (error instanceof MemberAlreadyExistsError) {
-            return {
-                success: false,
-                message: 'Member already exists.',
-                result: null,
-            };
-        } else {
-            return {
-                success: false,
-                message: 'Could not parse data.',
-                result: null,
-            };
-        }
-    }
 
-    if (validatedData.message) {
-        const error = validatedData.message;
-        return { success: false, message: error, result: null };
+        return {
+            success: true,
+            message: 'Log-in successful!',
+            result,
+        };
+    } catch (error) {
+        // Handle specific errors
+        const errorMessage = getErrorMessage(error);
+        return {
+            success: false,
+            message: errorMessage,
+            result: null,
+        };
     }
-    return { success: true, message: 'Log-in successful!', result };
+};
+
+// Helper function to map errors to user-friendly messages
+const getErrorMessage = (error) => {
+    if (error instanceof InvalidCredentialsError) {
+        return 'Invalid email or password.';
+    }
+    if (error instanceof MemberNotFoundError) {
+        return 'Member not found.';
+    }
+    if (error instanceof MemberAlreadyExistsError) {
+        return 'Member already exists.';
+    }
+    return 'An unexpected error occurred.';
 };
