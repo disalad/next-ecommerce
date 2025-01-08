@@ -5,21 +5,33 @@ import { MdEmail } from 'react-icons/md';
 import Link from 'next/link';
 import { logInUserCredentials } from '@/lib/auth/authAction';
 import { useAlertBox } from '@/context/AlertBoxContext';
+import { useSession } from 'next-auth/react';
+import { tryUpdateSession } from '@/utils/sessionUtils';
 
 function Login() {
     const { showAlert } = useAlertBox();
+    const { data: session, update } = useSession();
 
-    const handleLogIn = async ev => {
+    const handleLogIn = async (ev) => {
         ev.preventDefault();
         // Get form data
         const formData = new FormData(ev.target);
         const data = Object.fromEntries(formData.entries());
+
         // Log in user
         const { success, message, _result } = await logInUserCredentials(data);
         console.log({ success, message });
+
         // Notify user of the success or error
-        success ? showAlert(message, 'success') : showAlert(message, 'error');
+        if (success) {
+            showAlert(message, 'success');
+            await tryUpdateSession(update, showAlert);
+        } else {
+            showAlert(message, 'error');
+        }
     };
+
+    console.warn(session);
 
     return (
         <div className='flex items-center justify-center min-h-screen bg-gray-200 pt-16 pb-20'>
@@ -52,9 +64,14 @@ function Login() {
                                 type='checkbox'
                                 className='w-4 h-4 text-indigo-500 border-gray-300 rounded focus:ring-2 focus:ring-indigo-500'
                             />
-                            <span className='ml-2 text-sm text-gray-600'>Keep me signed in</span>
+                            <span className='ml-2 text-sm text-gray-600'>
+                                Keep me signed in
+                            </span>
                         </label>
-                        <a href='#' className='text-sm text-indigo-500 hover:underline'>
+                        <a
+                            href='#'
+                            className='text-sm text-indigo-500 hover:underline'
+                        >
                             Forgot password?
                         </a>
                     </div>
@@ -81,7 +98,10 @@ function Login() {
                 </form>
                 <p className='mt-4 text-center text-sm text-gray-600'>
                     Not a member yet?{' '}
-                    <Link href='/signup' className='text-indigo-500 hover:underline'>
+                    <Link
+                        href='/signup'
+                        className='text-indigo-500 hover:underline'
+                    >
                         Sign Up
                     </Link>
                 </p>

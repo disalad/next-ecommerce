@@ -5,26 +5,40 @@ import { MdEmail } from 'react-icons/md';
 import Link from 'next/link';
 import { signupUserCredentials } from '@/lib/auth/authAction';
 import { useAlertBox } from '@/context/AlertBoxContext';
+import { useSession } from 'next-auth/react';
+import { tryUpdateSession } from '@/utils/sessionUtils';
 
 function Signup() {
     const { showAlert } = useAlertBox();
+    const { data: session, update } = useSession();
 
-    const handleSignUp = async ev => {
+    const handleSignUp = async (ev) => {
         ev.preventDefault();
         // Get form data
         const formData = new FormData(ev.target);
         const data = Object.fromEntries(formData.entries());
-        // Log in user
+
+        // Sign up user
         const { success, message, _result } = await signupUserCredentials(data);
         console.log({ success, message });
+
         // Notify user of the success or error
-        success ? showAlert(message, 'success') : showAlert(message, 'error');
+        if (success) {
+            showAlert(message, 'success');
+            await tryUpdateSession(update, showAlert);
+        } else {
+            showAlert(message, 'error');
+        }
     };
+
+    console.log(session);
 
     return (
         <div className='flex items-center justify-center min-h-screen bg-gray-200 pt-16 pb-20'>
             <div className='w-full max-w-lg px-10 py-14 bg-white shadow-none border border-gray-200 rounded-2xl'>
-                <h2 className='text-2xl font-bold text-center mb-10'>Sign Up</h2>
+                <h2 className='text-2xl font-bold text-center mb-10'>
+                    Sign Up
+                </h2>
                 <form onSubmit={handleSignUp}>
                     <div className='mb-6'>
                         <input
@@ -85,7 +99,10 @@ function Signup() {
                 </form>
                 <p className='mt-4 text-center text-sm text-gray-600'>
                     Already have an account?{' '}
-                    <Link href='/login' className='text-indigo-500 hover:underline'>
+                    <Link
+                        href='/login'
+                        className='text-indigo-500 hover:underline'
+                    >
                         Log in
                     </Link>
                 </p>
