@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import { authorizeUser } from '@/lib/auth/user';
+import { authorizeUser } from '@/lib/auth/userAction';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
     session: { strategy: 'jwt' },

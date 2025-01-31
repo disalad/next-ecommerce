@@ -2,7 +2,7 @@
 
 import { signIn } from '@/auth';
 import { validateLogInData, validateSignUpData } from './validate';
-import { createUserInDatabase } from './user';
+import { createUserInDatabase } from './userAction';
 import {
     InvalidCredentialsError,
     MemberNotFoundError,
