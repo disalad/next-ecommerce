@@ -8,27 +8,40 @@ import {
     MemberAlreadyExistsError,
 } from './errors';
 
+// Sign-up logic: creates a new user and signs them in (handled by NextAuth)
 export const signupUserCredentials = async (data) => {
     const { fullName, email, password, _confirmPassword } = data;
 
     // Validate the sign-up data
     const validatedData = validateSignUpData(data);
-
-    // Call the NextAuth sign-in
-    const result = await signIn('credentials', {
-        name: fullName,
-        email,
-        password,
-        redirect: false, // Prevent automatic redirection
-    });
-
-    if (result.error || validatedData.message) {
-        const error = validatedData.message || result.error;
-        return { success: false, message: error, result: null };
+    if (validatedData.message) {
+        return { success: false, message: validatedData.message, result: null };
     }
-    return { success: true, message: 'Log-in successful!', result };
+
+    try {
+        // Call NextAuth's signIn function which handles both authentication and JWT token generation
+        const result = await signIn('credentials', {
+            name: fullName,
+            email,
+            password,
+            redirect: false, // Prevent automatic redirection
+        });
+
+        if (result.error) {
+            return { success: false, message: result.error, result: null };
+        }
+
+        return {
+            success: true,
+            message: 'Sign-up successful and logged in!',
+            result,
+        };
+    } catch (error) {
+        return { success: false, message: handleError(error), result: null };
+    }
 };
 
+// Log-in logic: handles JWT-based login through NextAuth's signIn
 export const logInUserCredentials = async (data) => {
     const { email, password } = data;
 
@@ -43,12 +56,16 @@ export const logInUserCredentials = async (data) => {
     }
 
     try {
-        // Attempt to sign in with credentials
+        // Attempt to sign in with credentials (NextAuth handles JWT token generation)
         const result = await signIn('credentials', {
             email,
             password,
-            redirect: false,
+            redirect: false, // Prevent automatic redirection
         });
+
+        if (result.error) {
+            return { success: false, message: result.error, result: null };
+        }
 
         return {
             success: true,
@@ -56,18 +73,16 @@ export const logInUserCredentials = async (data) => {
             result,
         };
     } catch (error) {
-        // Handle specific errors
-        const errorMessage = getErrorMessage(error);
         return {
             success: false,
-            message: errorMessage,
+            message: handleError(error),
             result: null,
         };
     }
 };
 
 // Helper function to map errors to user-friendly messages
-const getErrorMessage = (error) => {
+const handleError = (error) => {
     if (error instanceof InvalidCredentialsError) {
         return 'Invalid email or password.';
     }
@@ -77,5 +92,8 @@ const getErrorMessage = (error) => {
     if (error instanceof MemberAlreadyExistsError) {
         return 'Member already exists.';
     }
-    return 'An unexpected error occurred.';
+    if (error instanceof Error) {
+        return error.message || 'An unexpected error occurred.';
+    }
+    return 'An unknown error occurred.';
 };
