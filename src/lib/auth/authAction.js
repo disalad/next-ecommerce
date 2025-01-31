@@ -2,6 +2,7 @@
 
 import { signIn } from '@/auth';
 import { validateLogInData, validateSignUpData } from './validate';
+import { createUserInDatabase } from './user';
 import {
     InvalidCredentialsError,
     MemberNotFoundError,
@@ -19,6 +20,8 @@ export const signupUserCredentials = async (data) => {
     }
 
     try {
+        const newUser = await createUserInDatabase(data);
+
         // Call NextAuth's signIn function which handles both authentication and JWT token generation
         const result = await signIn('credentials', {
             name: fullName,

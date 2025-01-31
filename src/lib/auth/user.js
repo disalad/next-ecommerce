@@ -8,7 +8,7 @@ import {
 } from '@/lib/auth/errors';
 
 export const authorizeUser = async (credentials) => {
-    const { name, email, password, callbackUrl } = credentials;
+    const { email, password, callbackUrl } = credentials;
 
     await dbConnect();
     const foundUser = await User.findOne({ email: email }); // Find a user with the email
@@ -16,15 +16,23 @@ export const authorizeUser = async (credentials) => {
         ? await bcrypt.compare(password, foundUser.password)
         : null;
 
-    const fromLogin = callbackUrl.includes('login');
-    if (foundUser && passwordMatch && fromLogin) {
+    if (foundUser && passwordMatch) {
         console.log('Found user: ', foundUser);
         return foundUser; // If the user is found, return the user
-    } else if (foundUser && !passwordMatch && fromLogin) {
+    } else if (foundUser && !passwordMatch) {
         throw new InvalidCredentialsError('Invalid credentials'); // If the password does not match, throw an error
-    } else if (!foundUser && fromLogin) {
+    } else if (!foundUser) {
         throw new MemberNotFoundError('Member not found'); // If the user is not found, throw an error
-    } else if (foundUser && !fromLogin) {
+    }
+};
+
+export const createUserInDatabase = async (credentials) => {
+    const { fullName, email, password } = credentials;
+
+    await dbConnect();
+    const foundUser = await User.findOne({ email: email }); // Find a user with the email
+
+    if (foundUser) {
         throw new MemberAlreadyExistsError('Member already exists'); // If the user already exists, throw an error
     }
 
@@ -39,12 +47,12 @@ export const authorizeUser = async (credentials) => {
 
     // If the user is not found, create a new user
     const newUser = new User({
-        name,
+        name: fullName,
         email,
         password: hashedPassword,
     });
     await newUser.save(); // Save the new user
 
     console.log('Created user: ', newUser);
-    return credentials;
+    return Object(newUser);
 };
