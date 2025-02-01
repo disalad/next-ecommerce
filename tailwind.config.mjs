@@ -13,6 +13,7 @@ export default {
                 foreground: 'var(--foreground)',
             },
             screens: {
+                'sm-md': '500px',
                 'phone-sm': '420px',
                 phone: '767px',
                 'tablet-lg': '1024px',
