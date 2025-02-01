@@ -1,9 +1,11 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const CategoryMenuClient = ({ categories }) => {
+    const router = useRouter();
     const scrollRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
@@ -40,6 +42,14 @@ const CategoryMenuClient = ({ categories }) => {
         setIsDragging(false);
     };
 
+    const handleCategoryClick = (category) => {
+        router.push(
+            `/categories/${category.slug}?url=${encodeURIComponent(
+                category.url
+            )}`
+        );
+    };
+
     return (
         <div className='relative w-full'>
             {/* Left Arrow */}
@@ -50,10 +60,10 @@ const CategoryMenuClient = ({ categories }) => {
                 <ChevronLeft size={20} />
             </button>
 
-            {/* Category List */}
+            {/* Scrollable Category List */}
             <div
                 ref={scrollRef}
-                className='flex space-x-3 overflow-x-auto scrollbar-hide hide-scrollbar scroll-smooth px-10 select-none cursor-pointer'
+                className='flex space-x-3 overflow-x-auto hide-scrollbar scroll-smooth px-10 select-none cursor-pointer'
                 onMouseDown={startDrag}
                 onMouseMove={onDrag}
                 onMouseUp={stopDrag}
@@ -62,12 +72,13 @@ const CategoryMenuClient = ({ categories }) => {
                 onTouchMove={onDrag}
                 onTouchEnd={stopDrag}
             >
-                {categories.map((category, index) => (
+                {categories.map((category) => (
                     <div
-                        key={index}
+                        key={category.slug}
+                        onClick={() => handleCategoryClick(category)}
                         className='px-4 py-2 whitespace-nowrap rounded-full border border-gray-300 text-black hover:bg-gray-200'
                     >
-                        {category}
+                        {category.name}
                     </div>
                 ))}
             </div>
