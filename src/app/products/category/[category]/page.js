@@ -6,7 +6,7 @@ async function ProductCategory({ params }) {
     return (
         <div className='py-6 px-2 sm-md:p-8'>
             <h1 className='text-xl font-bold mb-4'>Choose a Category</h1>
-            <CategoryMenuServer />
+            <CategoryMenuServer category={category} />
             <ProductsList category={category} />
         </div>
     );

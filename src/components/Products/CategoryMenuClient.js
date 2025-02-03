@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const CategoryMenuClient = ({ categories }) => {
+const CategoryMenuClient = ({ currentCategory, categories }) => {
     const router = useRouter();
     const scrollRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -46,6 +46,12 @@ const CategoryMenuClient = ({ categories }) => {
         router.push(`/products/category/${category.slug}`);
     };
 
+    const reorderedCategories = categories.sort((a, b) => {
+        if (a.slug === currentCategory) return -1; // a comes first
+        if (b.slug === currentCategory) return 1; // b comes first
+        return 0; // no change in order
+    });
+
     return (
         <div className='relative w-full'>
             {/* Left Arrow */}
@@ -68,11 +74,16 @@ const CategoryMenuClient = ({ categories }) => {
                 onTouchMove={onDrag}
                 onTouchEnd={stopDrag}
             >
-                {categories.map((category) => (
+                {reorderedCategories.map((category) => (
                     <div
                         key={category.slug}
                         onClick={() => handleCategoryClick(category)}
-                        className='px-4 py-2 whitespace-nowrap rounded-full border border-gray-300 text-black hover:bg-gray-200'
+                        className={`px-4 py-2 whitespace-nowrap rounded-full border border-gray-300 text-black hover:bg-gray-200 
+                            ${
+                                category.slug === currentCategory
+                                    ? 'bg-sky-100'
+                                    : ''
+                            } `}
                     >
                         {category.name}
                     </div>
