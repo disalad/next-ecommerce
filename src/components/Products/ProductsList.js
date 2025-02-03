@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { getRandomInt } from '@/utils/numberUtils';
 import axios from 'axios';
 import Link from 'next/link';
 
@@ -35,10 +36,6 @@ export default function ProductList() {
             setLoading(false);
         }
     }, [skip, loading]);
-
-    useEffect(() => {
-        fetchProducts(); // Initial fetch
-    }, []);
 
     useEffect(() => {
         if (!observerRef.current) return;
@@ -82,7 +79,7 @@ export default function ProductList() {
             <div className='flex'>
                 {[...Array(fullStars)].map((_, i) => (
                     <svg
-                        key={i}
+                        key={i + getRandomInt()}
                         xmlns='http://www.w3.org/2000/svg'
                         className='w-4 h-4 text-yellow-500'
                         fill='currentColor'
@@ -93,7 +90,7 @@ export default function ProductList() {
                 ))}
                 {[...Array(emptyStars)].map((_, i) => (
                     <svg
-                        key={i}
+                        key={i + getRandomInt()}
                         xmlns='http://www.w3.org/2000/svg'
                         className='w-4 h-4 text-gray-300'
                         fill='currentColor'
@@ -114,7 +111,7 @@ export default function ProductList() {
                 <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6'>
                     {products.map((product) => (
                         <Link
-                            key={product.id}
+                            key={product.id + getRandomInt()}
                             href={`/product/${product.id}`}
                             passHref
                         >
@@ -141,7 +138,7 @@ export default function ProductList() {
                     {loading &&
                         [...Array(LIMIT)].map((_, index) => (
                             <div
-                                key={index}
+                                key={index + getRandomInt()}
                                 className='p-4 border rounded animate-pulse product-card'
                             >
                                 <div className='h-36 bg-gray-300 rounded'></div>
