@@ -43,11 +43,7 @@ const CategoryMenuClient = ({ categories }) => {
     };
 
     const handleCategoryClick = (category) => {
-        router.push(
-            `/categories/${category.slug}?url=${encodeURIComponent(
-                category.url
-            )}`
-        );
+        router.push(`/products/category/${category.slug}`);
     };
 
     return (

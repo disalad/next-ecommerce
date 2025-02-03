@@ -5,9 +5,7 @@ import { getRandomInt } from '@/utils/numberUtils';
 import axios from 'axios';
 import Link from 'next/link';
 
-const LIMIT = 15;
-
-export default function ProductList() {
+function ProductsList({ limit = 15, category = null }) {
     const [products, setProducts] = useState([]);
     const [skip, setSkip] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -16,18 +14,19 @@ export default function ProductList() {
 
     const fetchProducts = useCallback(async () => {
         if (!hasMore.current || loading) return;
+        const categorySubRoute = category ? `/category/${category}` : '';
 
         setLoading(true);
         try {
             const res = await axios.get(
-                `https://dummyjson.com/products?limit=${LIMIT}&skip=${skip}`
+                `https://dummyjson.com/products${categorySubRoute}?limit=${limit}&skip=${skip}`
             );
             const newProducts = res.data.products;
 
             setProducts((prev) => [...prev, ...newProducts]);
-            setSkip((prev) => prev + LIMIT);
+            setSkip((prev) => prev + limit);
 
-            if (newProducts.length < LIMIT) {
+            if (newProducts.length < limit) {
                 hasMore.current = false;
             }
         } catch (error) {
@@ -136,7 +135,7 @@ export default function ProductList() {
                         </Link>
                     ))}
                     {loading &&
-                        [...Array(LIMIT)].map((_, index) => (
+                        [...Array(limit)].map((_, index) => (
                             <div
                                 key={index + getRandomInt()}
                                 className='p-4 border rounded animate-pulse product-card'
@@ -153,3 +152,5 @@ export default function ProductList() {
         </div>
     );
 }
+
+export default ProductsList;
