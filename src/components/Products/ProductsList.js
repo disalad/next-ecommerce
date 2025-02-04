@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { getRandomInt } from '@/utils/numberUtils';
+import { renderStarRating } from '@/utils/renderStarRating';
 import axios from 'axios';
 import Link from 'next/link';
 
@@ -69,40 +70,6 @@ function ProductsList({ limit = 15, category = null }) {
         );
     };
 
-    const renderStarRating = (rating) => {
-        const fullStars = Math.floor(rating);
-        const emptyStars = 5 - fullStars;
-        const percentage = (rating / 5) * 100;
-
-        return (
-            <div className='flex'>
-                {[...Array(fullStars)].map((_, i) => (
-                    <svg
-                        key={i + getRandomInt()}
-                        xmlns='http://www.w3.org/2000/svg'
-                        className='w-4 h-4 text-yellow-500'
-                        fill='currentColor'
-                        viewBox='0 0 20 20'
-                    >
-                        <path d='M10 15.27l4.18 2.73-1.64-5.03L18 8.24l-5.19-.42L10 .25 7.19 7.82 2 8.24l4.46 4.73-1.64 5.03L10 15.27z' />
-                    </svg>
-                ))}
-                {[...Array(emptyStars)].map((_, i) => (
-                    <svg
-                        key={i + getRandomInt()}
-                        xmlns='http://www.w3.org/2000/svg'
-                        className='w-4 h-4 text-gray-300'
-                        fill='currentColor'
-                        viewBox='0 0 20 20'
-                    >
-                        <path d='M10 15.27l4.18 2.73-1.64-5.03L18 8.24l-5.19-.42L10 .25 7.19 7.82 2 8.24l4.46 4.73-1.64 5.03L10 15.27z' />
-                    </svg>
-                ))}
-                <span className='ml-2 text-sm'>{Math.round(percentage)}%</span>
-            </div>
-        );
-    };
-
     return (
         <div className='w-full p-0 mt-6'>
             <div className='mx-auto'>
@@ -111,7 +78,7 @@ function ProductsList({ limit = 15, category = null }) {
                     {products.map((product) => (
                         <Link
                             key={product.id + getRandomInt()}
-                            href={`/product/${product.id}`}
+                            href={`/products/${product.id}`}
                             passHref
                         >
                             <div className='p-4 border rounded hover:shadow-lg relative product-card'>
