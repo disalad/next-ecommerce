@@ -31,3 +31,20 @@ export const renderStarRating = (rating) => {
         </div>
     );
 };
+
+
+export const renderStockStatus = (stock, rating) => {
+    const stockWarning =
+        stock < 10
+            ? `ONLY ${stock} LEFT`
+            : stock < 25
+            ? `ALMOST SOLD OUT`
+            : null;
+    const topRated = rating > 4 ? 'TOP RATED' : null;
+
+    return (
+        <div className='text-sm text-orange-600'>
+            {stockWarning || topRated}
+        </div>
+    );
+};

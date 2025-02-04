@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { getNewPrice } from '@/utils/numberUtils';
-import { renderStarRating } from '@/utils/renderStarRating';
+import { renderStarRating } from '@/utils/productUtils';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -13,7 +13,7 @@ const ProductPage = ({ product }) => {
     const [quantity, setQuantity] = useState(1);
 
     const { price, discountPercentage } = product;
-    console.log(product);
+
     return (
         <div className='flex p-8'>
             {/* Image Slider */}

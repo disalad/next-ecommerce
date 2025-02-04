@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { getRandomInt } from '@/utils/numberUtils';
-import { renderStarRating } from '@/utils/renderStarRating';
+import { getRandomInt, getNewPrice } from '@/utils/numberUtils';
+import { renderStarRating, renderStockStatus } from '@/utils/productUtils';
 import axios from 'axios';
 import Link from 'next/link';
 
@@ -54,22 +54,6 @@ function ProductsList({ limit = 15, category = null }) {
         return () => observer.disconnect();
     }, [fetchProducts, loading]);
 
-    const renderStockStatus = (stock, rating) => {
-        const stockWarning =
-            stock < 10
-                ? `ONLY ${stock} LEFT`
-                : stock < 25
-                ? `ALMOST SOLD OUT`
-                : null;
-        const topRated = rating > 4 ? 'TOP RATED' : null;
-
-        return (
-            <div className='text-sm text-orange-600'>
-                {stockWarning || topRated}
-            </div>
-        );
-    };
-
     return (
         <div className='w-full p-0 mt-6'>
             <div className='mx-auto'>
@@ -91,7 +75,14 @@ function ProductsList({ limit = 15, category = null }) {
                                     {product.title}
                                 </div>
                                 <div className='font-bold text-lg text-gray-900'>
-                                    ${product.price}
+                                    $
+                                    {getNewPrice(
+                                        product.price,
+                                        product.discountPercentage
+                                    )}{' '}
+                                    <span className='text-gray-400 line-through text-lg'>
+                                        ${product.price}
+                                    </span>
                                 </div>
                                 {renderStockStatus(
                                     product.stock,
