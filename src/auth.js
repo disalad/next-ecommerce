@@ -1,9 +1,15 @@
 import NextAuth from 'next-auth';
+import { authConfig } from './auth.config.js';
 import Credentials from 'next-auth/providers/credentials';
 import { authorizeUser } from '@/lib/auth/userAction';
 
-export const { auth, handlers, signIn, signOut } = NextAuth({
-    session: { strategy: 'jwt' },
+export const {
+    auth,
+    signIn,
+    signOut,
+    handlers: { GET, POST },
+} = NextAuth({
+    ...authConfig,
     providers: [
         Credentials({
             credentials: {
