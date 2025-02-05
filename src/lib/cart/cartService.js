@@ -51,12 +51,18 @@ export async function addItemToCart(newItem, userId) {
     }
 }
 
-export async function getCartItem(itemId) {
-    // Implement logic to fetch a single cart item by ID
-}
-
-export async function updateCartItem(itemId, updatedData) {
-    // Implement logic to update a specific cart item
+// Implement logic to clear the cart
+export async function clearCart(userId) {
+    await dbConnect();
+    const cart = await Cart.findOne({ userId });
+    if (cart) {
+        cart.items = [];
+        await cart.save();
+        console.log('Cleared Cart:', cart);
+        return cart;
+    } else {
+        return null;
+    }
 }
 
 export async function removeCartItem(itemId) {
