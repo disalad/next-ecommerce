@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server';
-// import { getCartItems, addItemToCart } from '@/lib/cartService';
+import { getCartItems, addItemToCart } from '@/lib/cart/cartService';
 import { auth } from '@/auth';
 
 export async function GET(request) {
     const session = await auth();
-    console.log('session', session);
+    const userId = session.user.id;
 
     try {
-        // const cartItems = await getCartItems();
-        return NextResponse.json({ cartItems: [] });
+        const cartItems = (await getCartItems(userId)) || [];
+        console.log('cartItems', cartItems);
+        return NextResponse.json({ ...cartItems._doc });
     } catch (error) {
         return NextResponse.json(
             { error: 'Failed to get cart items' },
@@ -20,8 +21,8 @@ export async function GET(request) {
 export async function POST(request) {
     try {
         const newItem = await request.json();
-        // const result = await addItemToCart(newItem);
-        return NextResponse.json(newItem, { status: 201 });
+        const result = await addItemToCart(newItem);
+        return NextResponse.json(result, { status: 201 });
     } catch (error) {
         return NextResponse.json(
             { error: 'Failed to add item to cart' },
