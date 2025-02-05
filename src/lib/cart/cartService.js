@@ -8,8 +8,47 @@ export async function getCartItems(userId) {
     return cart;
 }
 
-export async function addItemToCart(newItem) {
-    // Implement logic to add a new cart item into MongoDB
+// Implement logic to add a new cart item into MongoDB
+export async function addItemToCart(newItem, userId) {
+    await dbConnect();
+
+    const cart = await Cart.findOne({ userId });
+    if (cart) {
+        // Check if the product already exists in the cart
+        const existingItemIndex = cart.items.findIndex(
+            (item) => item.productId.toString() === newItem.productId.toString()
+        );
+
+        if (existingItemIndex !== -1) {
+            // Product exists, update the quantity
+            cart.items[existingItemIndex].quantity = newItem.quantity;
+        } else {
+            // Product doesn't exist, add new item to the cart
+            cart.items.push({
+                productId: newItem.productId,
+                quantity: newItem.quantity,
+            });
+        }
+
+        await cart.save();
+        console.log('Updated Cart:', cart);
+        return cart;
+    } else {
+        // If no cart exists for the user, create a new cart
+        const newCart = new Cart({
+            userId,
+            items: [
+                {
+                    productId: newItem.productId,
+                    quantity: newItem.quantity,
+                },
+            ],
+        });
+
+        await newCart.save();
+        console.log('Created New Cart:', newCart);
+        return newCart;
+    }
 }
 
 export async function getCartItem(itemId) {
