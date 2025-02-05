@@ -65,6 +65,15 @@ export async function clearCart(userId) {
     }
 }
 
-export async function removeCartItem(itemId) {
-    // Implement logic to remove a cart item
+export async function removeCartItem(userId, itemId) {
+    await dbConnect();
+    const cart = await Cart.findOne({ userId });
+    if (cart) {
+        cart.items = cart.items.filter((item) => item.productId !== itemId);
+        await cart.save();
+        console.log('Updated Cart:', cart);
+        return cart;
+    } else {
+        return null;
+    }
 }
