@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { getNewPrice } from '@/utils/numberUtils';
 import { renderStarRating } from '@/utils/productUtils';
+import axios from 'axios';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -13,6 +14,14 @@ const ProductPage = ({ product }) => {
     const [quantity, setQuantity] = useState(1);
 
     const { price, discountPercentage } = product;
+
+    const addToCartHandler = async () => {
+        const newItemToCart = await axios.post('/api/cart/add', {
+            productId: product.id,
+            quantity,
+        });
+        return newItemToCart;
+    };
 
     return (
         <div className='flex p-8'>
@@ -87,7 +96,10 @@ const ProductPage = ({ product }) => {
                 </div>
 
                 {/* Add to Cart Button */}
-                <div className='mt-6'>
+                <div
+                    className='mt-6'
+                    onClick={addToCartHandler}
+                >
                     <button className='bg-yellow-500 px-6 py-2 text-white font-semibold rounded'>
                         ADD TO CART
                     </button>
