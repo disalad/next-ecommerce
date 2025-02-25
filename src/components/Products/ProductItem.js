@@ -5,8 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { getNewPrice, stringToNumber } from '@/utils/numberUtils';
 import { renderStarRating } from '@/utils/productUtils';
+import { addToCart, removeFromCart } from '@/utils/cartUtils';
 import { useCart } from '@/context/CartContext';
-import axios from 'axios';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -22,17 +22,12 @@ const ProductPage = ({ product }) => {
     const addToCartHandler = async () => {
         let item;
         if (quantity === 0) {
-            item = await axios.post('/api/cart/remove', {
-                productId,
-            });
+            item = await removeFromCart(productId);
         } else {
-            item = await axios.post('/api/cart/add', {
-                productId,
-                quantity,
-            });
+            item = await addToCart(productId, quantity);
         }
         await refetchCart(); // Refetch cart data after updating cart.
-        return item.data;
+        return item;
     };
 
     useEffect(() => {

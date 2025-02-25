@@ -36,7 +36,12 @@ export function CartContextProvider({ children }) {
 
     return (
         <CartContext.Provider
-            value={{ cart, refetchCart: fetchCartData, cartLoading: loading }}
+            value={{
+                cart,
+                setCart,
+                refetchCart: fetchCartData,
+                cartLoading: loading,
+            }}
         >
             {children}
         </CartContext.Provider>
