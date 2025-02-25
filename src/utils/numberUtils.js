@@ -15,3 +15,15 @@ export const getNewPrice = (originalPrice, discountPercentage) => {
 
     return parseFloat(newPrice.toFixed(2));
 };
+
+export const stringToNumber = (value) => {
+    // Try to turn the value into a number
+    const number = Number(value);
+
+    // Check if it's a valid number. If not, return 0
+    if (isNaN(number)) {
+        return 0;
+    } else {
+        return number;
+    }
+};

@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
-import { getNewPrice } from '@/utils/numberUtils';
+import { getNewPrice, stringToNumber } from '@/utils/numberUtils';
 import { renderStarRating } from '@/utils/productUtils';
+import { useCart } from '@/context/CartContext';
 import axios from 'axios';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -12,16 +13,40 @@ import 'swiper/css/pagination';
 
 const ProductPage = ({ product }) => {
     const [quantity, setQuantity] = useState(1);
-
+    const [itemExists, setItemExists] = useState(false);
+    const { cart, refetchCart } = useCart();
     const { price, discountPercentage } = product;
 
+    const productId = product.id;
+
     const addToCartHandler = async () => {
-        const newItemToCart = await axios.post('/api/cart/add', {
-            productId: product.id,
-            quantity,
-        });
-        return newItemToCart;
+        let item;
+        if (quantity === 0) {
+            item = await axios.post('/api/cart/remove', {
+                productId,
+            });
+        } else {
+            item = await axios.post('/api/cart/add', {
+                productId,
+                quantity,
+            });
+        }
+        await refetchCart(); // Refetch cart data after updating cart.
+        return item.data;
     };
+
+    useEffect(() => {
+        const existingItem = cart?.items?.find(
+            (item) => item.productId === productId
+        );
+        if (existingItem) {
+            setItemExists(true);
+            setQuantity(stringToNumber(existingItem?.quantity));
+            return;
+        }
+        setItemExists(false);
+        setQuantity(1);
+    }, [cart]);
 
     return (
         <div className='flex p-8'>
@@ -81,7 +106,11 @@ const ProductPage = ({ product }) => {
                 <div className='mt-10 flex items-center'>
                     <p className='text-sm font-semibold mr-4'>Quantity:</p>
                     <button
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        onClick={() =>
+                            itemExists
+                                ? setQuantity(Math.max(0, quantity - 1))
+                                : setQuantity(Math.max(1, quantity - 1))
+                        }
                         className='border px-3 py-1'
                     >
                         -
@@ -95,13 +124,10 @@ const ProductPage = ({ product }) => {
                     </button>
                 </div>
 
-                {/* Add to Cart Button */}
-                <div
-                    className='mt-6'
-                    onClick={addToCartHandler}
-                >
+                {/* Add to Cart or Update Cart Button */}
+                <div className='mt-6' onClick={addToCartHandler}>
                     <button className='bg-yellow-500 px-6 py-2 text-white font-semibold rounded'>
-                        ADD TO CART
+                        {itemExists ? 'UPDATE CART' : 'ADD TO CART'}
                     </button>
                 </div>
             </div>

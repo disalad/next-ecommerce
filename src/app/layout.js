@@ -2,6 +2,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SessionProvider } from 'next-auth/react';
 import { AlertBoxContextProvider } from '@/context/AlertBoxContext';
+import { CartContextProvider } from '@/context/CartContext';
 import '@/styles/styles.scss';
 
 export const metadata = {
@@ -15,10 +16,12 @@ export default function RootLayout({ children }) {
             <body>
                 <SessionProvider>
                     <AlertBoxContextProvider>
-                        <Header />
-                        <div style={{ height: '95px' }}></div>
-                        {children}
-                        <Footer />
+                        <CartContextProvider>
+                            <Header />
+                            <div style={{ height: '95px' }}></div>
+                            {children}
+                            <Footer />
+                        </CartContextProvider>
                     </AlertBoxContextProvider>
                 </SessionProvider>
             </body>

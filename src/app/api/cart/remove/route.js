@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { removeCartItem } from '@/lib/cart/cartService';
 import { auth } from '@/auth';
 
-export async function DELETE(request) {
+export async function POST(request) {
     const session = await auth();
     const userId = session.user.id;
     try {
