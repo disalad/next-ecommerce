@@ -6,9 +6,10 @@ import { useCart } from '@/context/CartContext';
 import { getNewPrice } from '@/utils/numberUtils';
 import { removeFromCart, addToCart } from '@/utils/cartUtils';
 import Link from 'next/link';
+import { ThreeDots } from 'react-loader-spinner';
 
 const Cart = () => {
-    const { cart, setCart, refetchCart } = useCart();
+    const { cart, setCart, refetchCart, cartLoading } = useCart();
     const updateTimeoutRef = useRef({}); // Store timeouts to debounce API calls
 
     const handleQuantityChange = (productId, amount) => {
@@ -21,7 +22,7 @@ const Cart = () => {
         updateTimeoutRef.current[productId] = setTimeout(async () => {
             try {
                 const newQuantity =
-                    cart.items.find((item) => item.productId === productId)
+                    cart.items?.find((item) => item.productId === productId)
                         ?.quantity + amount;
                 await addToCart(productId, Math.max(1, newQuantity));
                 await refetchCart(); // Refetch the cart after the update
@@ -29,7 +30,7 @@ const Cart = () => {
                 // Update global cart state after successful update
                 setCart((prevCart) => ({
                     ...prevCart,
-                    items: prevCart.items.map((item) =>
+                    items: prevCart.items?.map((item) =>
                         item.productId === productId
                             ? { ...item, quantity: Math.max(1, newQuantity) }
                             : item
@@ -45,7 +46,7 @@ const Cart = () => {
         // Update global cart state after product removal
         setCart((prevCart) => ({
             ...prevCart,
-            items: prevCart.items.filter(
+            items: prevCart.items?.filter(
                 (item) => item.productId !== productId
             ),
         }));
@@ -59,7 +60,7 @@ const Cart = () => {
         await refetchCart();
     };
 
-    const totalCost = cart.items.reduce(
+    const totalCost = cart?.items?.reduce(
         (sum, item) =>
             sum +
             getNewPrice(item.price, item.discountPercentage) * item.quantity,
@@ -72,63 +73,92 @@ const Cart = () => {
             <div className='grid grid-cols-5 gap-4 text-gray-500 font-semibold border-b pb-3'>
                 <span className='col-span-3'>Product</span>
                 <span className='col-span-1'>Amount</span>
-                <span className='col-span-1'>Price</span>
+                <span className='col-span-1  '>Price</span>
             </div>
-            {cart.items.map((item) => {
-                const itemPrice = getNewPrice(
-                    item.price,
-                    item.discountPercentage
-                );
-                return (
-                    <div
-                        key={item.productId}
-                        className='grid grid-cols-5 gap-4 items-center py-4 border-b'
-                    >
-                        <div className='col-span-3 flex items-center gap-4'>
-                            <img
-                                src={item.coverImage}
-                                alt={item.title}
-                                className='w-12 h-12 rounded-full'
-                            />
-                            <span className='font-semibold'>{item.title}</span>
-                        </div>
-                        <div className='col-span-1'>
-                            <div className='flex items-center border rounded-lg max-w-fit'>
-                                <button
-                                    className='px-3 py-1'
-                                    onClick={() =>
-                                        handleQuantityChange(item.productId, -1)
-                                    }
-                                >
-                                    -
-                                </button>
-                                <span className='px-4'>{item.quantity}</span>
-                                <button
-                                    className='px-3 py-1'
-                                    onClick={() =>
-                                        handleQuantityChange(item.productId, 1)
-                                    }
-                                >
-                                    +
-                                </button>
-                            </div>
-                        </div>
-                        <div className='col-span-1 flex justify-between items-center'>
-                            <span>
-                                ${(itemPrice * item.quantity).toFixed(2)}
-                            </span>
-                            <button
-                                className='text-red-500'
-                                onClick={() =>
-                                    handleProductRemoval(item.productId)
-                                }
+            {/* Show loader while loading */}
+            {cartLoading ? (
+                <div className='text-center flex justify-center mt-4 mb-12'>
+                    <ThreeDots
+                        visible={true}
+                        height='80'
+                        width='80'
+                        color='#000'
+                        radius='5'
+                        ariaLabel='three-dots-loading'
+                        wrapperStyle={{}}
+                        wrapperClass=''
+                    />
+                </div>
+            ) : (
+                <div>
+                    {cart.items.map((item) => {
+                        const itemPrice = getNewPrice(
+                            item.price,
+                            item.discountPercentage
+                        );
+                        return (
+                            <div
+                                key={item.productId}
+                                className='grid grid-cols-5 gap-4 items-center py-4 border-b'
                             >
-                                &times;
-                            </button>
-                        </div>
-                    </div>
-                );
-            })}
+                                <div className='col-span-3 flex items-center gap-4'>
+                                    <img
+                                        src={item.coverImage}
+                                        alt={item.title}
+                                        className='w-12 h-12 rounded-full'
+                                    />
+                                    <span className='font-semibold'>
+                                        {item.title}
+                                    </span>
+                                </div>
+                                <div className='col-span-1'>
+                                    <div className='flex items-center border rounded-lg max-w-fit'>
+                                        <button
+                                            className='px-3 py-1'
+                                            onClick={() =>
+                                                handleQuantityChange(
+                                                    item.productId,
+                                                    -1
+                                                )
+                                            }
+                                        >
+                                            -
+                                        </button>
+                                        <span className='px-4'>
+                                            {item.quantity}
+                                        </span>
+                                        <button
+                                            className='px-3 py-1'
+                                            onClick={() =>
+                                                handleQuantityChange(
+                                                    item.productId,
+                                                    1
+                                                )
+                                            }
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className='col-span-1 flex justify-between items-center'>
+                                    <span>
+                                        $
+                                        {(itemPrice * item.quantity).toFixed(2)}
+                                    </span>
+                                    <button
+                                        className='text-red-500'
+                                        onClick={() =>
+                                            handleProductRemoval(item.productId)
+                                        }
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
             <div className='grid grid-cols-3 my-8 items-center'>
                 <Link href='/products'>
                     <button className='flex items-center gap-2 text-black font-semibold'>
@@ -142,7 +172,7 @@ const Cart = () => {
                 />
                 <div className='flex justify-end items-center gap-4'>
                     <span className='font-semibold'>
-                        Total cost <strong>${totalCost.toFixed(2)}</strong>
+                        Total cost <strong>${totalCost?.toFixed(2)}</strong>
                     </span>
                     <button className='bg-yellow-400 text-white px-6 py-2 rounded-lg font-semibold'>
                         CHECKOUT
