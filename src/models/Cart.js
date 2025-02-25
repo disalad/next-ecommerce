@@ -21,6 +21,18 @@ const cartSchema = new mongoose.Schema(
                     min: 1,
                     default: 1,
                 },
+                title: {
+                    type: String,
+                },
+                price: {
+                    type: Number,
+                },
+                discountPercentage: {
+                    type: Number,
+                },
+                coverImage: {
+                    type: String,
+                },
             },
         ],
     },

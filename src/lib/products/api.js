@@ -8,3 +8,11 @@ export const fetchCategories = async () => {
     );
     return response.data;
 };
+
+export const fetchProductData = async (id) => {
+    const res = await fetch(`https://dummyjson.com/products/${id}`);
+    if (!res.ok) {
+        throw new Error('Failed to fetch product data');
+    }
+    return res.json();
+};

@@ -1,5 +1,6 @@
 import Cart from '@/models/Cart';
 import dbConnect from '@/lib/db/mongodb';
+import { fetchProductData } from '@/lib/products/api';
 
 // Implement logic to retrieve cart items from MongoDB
 export async function getCartItems(userId) {
@@ -24,9 +25,14 @@ export async function addItemToCart(newItem, userId) {
             cart.items[existingItemIndex].quantity = newItem.quantity;
         } else {
             // Product doesn't exist, add new item to the cart
+            const productData = await fetchProductData(newItem.productId);
             cart.items.push({
                 productId: newItem.productId,
                 quantity: newItem.quantity,
+                title: productData.title,
+                price: productData.price,
+                discountPercentage: productData.discountPercentage,
+                coverImage: productData.images[0],
             });
         }
 
