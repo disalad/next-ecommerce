@@ -9,20 +9,24 @@ import axios from 'axios';
 const CartContext = createContext();
 
 export function CartContextProvider({ children }) {
-    const [cart, setCart] = useState('');
+    const [cart, setCart] = useState({});
+    const [loading, setLoading] = useState(false);
     const { showAlert } = useAlertBox();
     const { data: session, status } = useSession();
 
     const fetchCartData = async () => {
         if (status === 'authenticated') {
             try {
+                setLoading(true);
                 const response = await axios.get('/api/cart');
                 setCart(response.data);
             } catch (error) {
                 showAlert('Failed fetching cart data.');
+            } finally {
+                setLoading(false);
             }
         } else {
-            setCart(null);
+            setCart({});
         }
     };
 
@@ -31,7 +35,9 @@ export function CartContextProvider({ children }) {
     }, [status]);
 
     return (
-        <CartContext.Provider value={{ cart, refetchCart: fetchCartData }}>
+        <CartContext.Provider
+            value={{ cart, refetchCart: fetchCartData, cartLoading: loading }}
+        >
             {children}
         </CartContext.Provider>
     );
