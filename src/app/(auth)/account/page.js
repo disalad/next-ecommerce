@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { handleAuthResult } from '@/utils/sessionUtils';
 import { useCart } from '@/context/CartContext';
 
-export default function AccountActions() {
+export default function Account() {
     const { data: session, update } = useSession();
     const { showAlert } = useAlertBox();
     const { setCart } = useCart();

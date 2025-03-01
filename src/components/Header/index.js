@@ -5,10 +5,13 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { FiSearch, FiShoppingCart, FiUser } from 'react-icons/fi';
 import { MdStorefront } from 'react-icons/md';
+import { useSession } from 'next-auth/react';
 
 const Header = () => {
+    const { data: session } = useSession();
     const [isScrolled, setIsScrolled] = useState(false);
     const pathname = usePathname();
+    const isLoggedIn = session?.user;
 
     const isHomePage = pathname === '/';
 
@@ -30,7 +33,13 @@ const Header = () => {
         <header
             className={`fixed top-0 left-0 w-full h-[95px] z-50 transition-all duration-300 shadow-none border-b border-gray-200
         ${isHomePage && !isScrolled ? 'bg-transparent' : 'bg-white'} 
-        ${isHomePage ? (isScrolled ? 'text-gray-800' : 'text-white') : 'text-gray-800'}`}
+        ${
+            isHomePage
+                ? isScrolled
+                    ? 'text-gray-800'
+                    : 'text-white'
+                : 'text-gray-800'
+        }`}
         >
             <div className='flex justify-between items-center px-12 py-8'>
                 {/* Logo */}
@@ -67,7 +76,7 @@ const Header = () => {
                         </Link>
                     </button>
                     <button className='hover:text-gray-900'>
-                        <Link href='/login'>
+                        <Link href={isLoggedIn ? '/account' : '/login'}>
                             <FiUser size={21} />{' '}
                         </Link>
                     </button>
