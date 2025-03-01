@@ -1,8 +1,8 @@
 'use server';
 
-import { signIn } from '@/auth';
+import { signIn, signOut, auth } from '@/auth';
 import { validateLogInData, validateSignUpData } from './validate';
-import { createUserInDatabase } from './userAction';
+import { createUserInDatabase, deleteUserFromDatabase } from './userAction';
 import {
     InvalidCredentialsError,
     MemberNotFoundError,
@@ -81,6 +81,32 @@ export const logInUserCredentials = async (data) => {
             message: handleError(error),
             result: null,
         };
+    }
+};
+
+// Log-out logic
+export const logOutUser = async () => {
+    try {
+        await signOut({ redirect: false });
+        return { success: true, message: 'Logged out successfully' };
+    } catch (error) {
+        return { success: false, message: 'Failed to log out' };
+    }
+};
+
+// Delete account logic
+export const deleteAccount = async () => {
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    if (!session?.user) return null;
+
+    try {
+        await deleteUserFromDatabase(userId);
+        await signOut({ redirect: false }); // Ensure user is signed out after deletion
+        return { success: true, message: 'Account deleted successfully' };
+    } catch (error) {
+        return { success: false, message: 'Failed to delete account' };
     }
 };
 

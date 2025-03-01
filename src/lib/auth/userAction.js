@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import dbConnect from '@/lib/db/mongodb';
 import User from '@/models/User';
+import Cart from '@/models/Cart';
 import {
     MemberNotFoundError,
     InvalidCredentialsError,
@@ -55,4 +56,20 @@ export const createUserInDatabase = async (credentials) => {
 
     console.log('Created user: ', newUser);
     return Object(newUser);
+};
+
+export const deleteUserFromDatabase = async (userId) => {
+    await dbConnect();
+
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+        throw new MemberNotFoundError('Member not found');
+    }
+
+    try {
+        await Cart.findOneAndDelete({ userId });
+    } catch (error) {}
+
+    return { success: true, message: 'User deleted successfully' };
 };
