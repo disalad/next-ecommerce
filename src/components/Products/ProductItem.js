@@ -7,6 +7,8 @@ import { getNewPrice, stringToNumber } from '@/utils/numberUtils';
 import { renderStarRating } from '@/utils/productUtils';
 import { addToCart, removeFromCart } from '@/utils/cartUtils';
 import { useCart } from '@/context/CartContext';
+import { useSession } from 'next-auth/react';
+import { useAlertBox } from '@/context/AlertBoxContext';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -15,11 +17,18 @@ const ProductPage = ({ product }) => {
     const [quantity, setQuantity] = useState(1);
     const [itemExists, setItemExists] = useState(false);
     const { cart, refetchCart } = useCart();
+    const { data: session } = useSession(); // To check if the user is logged in
+    const { showAlert } = useAlertBox();
+    
     const { price, discountPercentage } = product;
-
     const productId = product.id;
 
     const addToCartHandler = async () => {
+        if (!session) {
+            showAlert('Please log in to access and modify your cart', 'error'); // Show alert if the user is not logged in
+            return;
+        }
+
         let item;
         if (quantity === 0) {
             item = await removeFromCart(productId);
@@ -112,7 +121,11 @@ const ProductPage = ({ product }) => {
                     </button>
                     <span className='mx-4'>{quantity}</span>
                     <button
-                        onClick={() => setQuantity(quantity + 1)}
+                        onClick={() =>
+                            itemExists
+                                ? setQuantity(Math.max(0, quantity + 1))
+                                : setQuantity(quantity + 1)
+                        }
                         className='border px-3 py-1'
                     >
                         +
