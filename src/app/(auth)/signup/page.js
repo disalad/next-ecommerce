@@ -6,11 +6,13 @@ import Link from 'next/link';
 import { signupUserCredentials } from '@/lib/auth/authAction';
 import { useAlertBox } from '@/context/AlertBoxContext';
 import { useSession } from 'next-auth/react';
-import { tryUpdateSession } from '@/utils/sessionUtils';
+import { handleAuthResult } from '@/utils/sessionUtils';
+import { useCart } from '@/context/CartContext';
 
 function Signup() {
     const { showAlert } = useAlertBox();
     const { data: session, update } = useSession();
+    const { refetchCart } = useCart();
 
     const handleSignUp = async (ev) => {
         ev.preventDefault();
@@ -20,18 +22,17 @@ function Signup() {
 
         // Sign up user
         const { success, message, _result } = await signupUserCredentials(data);
-        console.log({ success, message });
 
         // Notify user of the success or error
-        if (success) {
+        try {
+            await update();
+            await refetchCart();
+            handleAuthResult({ success }, 'signup');
             showAlert(message, 'success');
-            await tryUpdateSession(update, showAlert);
-        } else {
+        } catch (error) {
             showAlert(message, 'error');
         }
     };
-
-    console.log(session);
 
     return (
         <div className='flex items-center justify-center min-h-screen bg-gray-200 pt-16 pb-20'>

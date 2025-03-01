@@ -6,11 +6,13 @@ import Link from 'next/link';
 import { logInUserCredentials } from '@/lib/auth/authAction';
 import { useAlertBox } from '@/context/AlertBoxContext';
 import { useSession } from 'next-auth/react';
-import { tryUpdateSession } from '@/utils/sessionUtils';
+import { handleAuthResult } from '@/utils/sessionUtils';
+import { useCart } from '@/context/CartContext';
 
 function Login() {
     const { showAlert } = useAlertBox();
     const { data: session, update } = useSession();
+    const { refetchCart } = useCart();
 
     const handleLogIn = async (ev) => {
         ev.preventDefault();
@@ -20,13 +22,14 @@ function Login() {
 
         // Log in user
         const { success, message, _result } = await logInUserCredentials(data);
-        console.log({ success, message });
 
         // Notify user of the success or error
-        if (success) {
+        try {
+            await update();
+            await refetchCart();
+            handleAuthResult({ success }, 'login');
             showAlert(message, 'success');
-            await tryUpdateSession(update, showAlert);
-        } else {
+        } catch (error) {
             showAlert(message, 'error');
         }
     };

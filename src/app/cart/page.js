@@ -1,6 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
 import { IoMdArrowBack } from 'react-icons/io';
 import { useCart } from '@/context/CartContext';
 import { getNewPrice } from '@/utils/numberUtils';
@@ -42,7 +41,7 @@ const Cart = () => {
                 </div>
             ) : (
                 <div>
-                    {cart.items.map((item, idx) => (
+                    {cart?.items?.map((item, idx) => (
                         <CartItem item={item} key={idx} />
                     ))}
                 </div>
