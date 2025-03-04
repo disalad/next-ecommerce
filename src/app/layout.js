@@ -1,6 +1,5 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import Providers from './Providers';
+import Components from './(index)/Components';
+import Providers from './(index)/Providers';
 import '@/styles/styles.scss';
 
 export const metadata = {
@@ -13,10 +12,7 @@ export default function RootLayout({ children }) {
         <html lang='en'>
             <body>
                 <Providers>
-                    <Header />
-                    <div style={{ height: '95px' }}></div>
-                    {children}
-                    <Footer />
+                    <Components>{children}</Components>
                 </Providers>
             </body>
         </html>

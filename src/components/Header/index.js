@@ -35,7 +35,7 @@ const Header = () => {
             className={`fixed top-0 left-0 w-full h-[65px] md:h-[100px] z-50 transition-all duration-300 border-b border-gray-200
                 ${
                     isHomePage && !isScrolled
-                        ? 'bg-transparent text-white'
+                        ? 'bg-transparent text-white border-none'
                         : 'bg-white text-gray-800'
                 }
                 flex items-center px-6 md:px-12`}
