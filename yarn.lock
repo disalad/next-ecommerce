@@ -20,6 +20,26 @@
     preact "10.11.3"
     preact-render-to-string "5.2.3"
 
+"@bprogress/core@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@bprogress/core/-/core-1.2.3.tgz#d8b97532bd06b2bc222e7145f6863409d1588025"
+  integrity sha512-RMdZtsbXB2IeygoyUo+eYXCyvnAB82JzmJgZXnS1B38hTnwzcveyiifLYa6VQvqaUkLNGns5tCCJFv+Qld5r4A==
+
+"@bprogress/next@^3.2.4":
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/@bprogress/next/-/next-3.2.4.tgz#310772f2197336faf7740454c03b243b09880ab2"
+  integrity sha512-s3ScGO/OVedphwwvwRpILRg5kWjjQG3M42TeJZOyD/QPSqzyCO+5WEjvjjdtT2qHafDBeq351e446vbcLq6vYw==
+  dependencies:
+    "@bprogress/core" "^1.2.3"
+    "@bprogress/react" "^1.1.8"
+
+"@bprogress/react@^1.1.8":
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@bprogress/react/-/react-1.1.8.tgz#81bf46b63227bac084ad7f1e07f59e6698121acb"
+  integrity sha512-D2JOO45IWCnVxvIkCpNx2Qmrn7QtX3UIIaybOF763fezeD2YMDdk9zWx9Q6k+3XbJRbTo01n0coDDgBBNqDSaA==
+  dependencies:
+    "@bprogress/core" "^1.2.3"
+
 "@emnapi/runtime@^1.2.0":
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@emnapi/runtime/-/runtime-1.3.1.tgz#0fcaa575afc31f455fd33534c19381cfce6c6f60"
