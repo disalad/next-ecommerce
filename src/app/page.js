@@ -1,3 +1,5 @@
+import Benefits from '@/components/Home/Benefits';
+
 function Home() {
     return (
         <section>
@@ -6,6 +8,7 @@ function Home() {
                 alt='Cover image'
                 className='w-screen h-auto'
             />
+            <Benefits />
         </section>
     );
 }

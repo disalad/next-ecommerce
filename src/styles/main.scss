@@ -41,3 +41,106 @@ body {
 .product-card {
     height: 275px !important;
 }
+
+.section {
+    margin-bottom: 70px;
+    @include bps.breakpoint(phone) {
+        margin-bottom: 150px;
+    }
+
+    .container {
+        max-width: 380px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 16px;
+        padding-right: 16px;
+        @include bps.breakpoint(phone) {
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @include bps.breakpoint(tablet-lg) {
+            max-width: 980px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @include bps.breakpoint(desktop-lg) {
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+
+    .section__intro {
+        margin-bottom: 36px;
+        @include bps.breakpoint(phone) {
+            margin-bottom: 93px;
+        }
+        h4 {
+            font-size: 23px;
+            font-weight: 300;
+            text-align: center;
+            @include bps.breakpoint(phone) {
+                font-size: 29px;
+            }
+        }
+    }
+}
+
+.shop-data-items {
+    @include bps.breakpoint(phone) {
+        display: flex;
+        justify-content: space-between;
+    }
+    li {
+        text-align: center;
+        margin-bottom: 50px;
+        @include bps.breakpoint(phone) {
+            width: 22%;
+            margin-bottom: 0;
+            text-align: left;
+        }
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f6f6f6;
+            margin-bottom: 28px;
+            border-radius: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 70px;
+            width: 70px;
+        }
+        .icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            display: flex;
+            color: #000;
+            transition: all 0.3s ease;
+            justify-content: center;
+            align-items: center;
+            margin-left: auto;
+            margin-right: auto;
+            @include bps.breakpoint(phone) {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+        .data-item__content {
+            h4 {
+                margin-bottom: 20px;
+            }
+            p {
+                font-size: 13px;
+                line-height: 150%;
+            }
+        }
+        &:hover {
+            i {
+                color: var(--color-orange);
+                background: var(--color-orange-light);
+            }
+        }
+    }
+}
