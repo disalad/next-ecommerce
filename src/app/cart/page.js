@@ -61,9 +61,11 @@ const Cart = () => {
                     <span className='font-semibold'>
                         Total cost <strong>${totalCost?.toFixed(2)}</strong>
                     </span>
-                    <button className='bg-yellow-400 text-white px-6 py-2 rounded-lg font-semibold'>
-                        CHECKOUT
-                    </button>
+                    <Link href='/cart/checkout'>
+                        <button className='bg-yellow-400 text-white px-6 py-2 rounded-lg font-semibold'>
+                            CHECKOUT
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>
