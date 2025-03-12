@@ -232,3 +232,35 @@ body {
         }
     }
 }
+
+.checkout__col-6 {
+    width: 100%;
+    @include bps.breakpoint(tablet-lg) {
+        width: 53%;
+    }
+    @include bps.breakpoint(desktop-lg) {
+        width: 41%;
+    }
+}
+.checkout__col-4 {
+    width: 100%;
+    margin-top: 30px;
+    @include bps.breakpoint(tablet-lg) {
+        width: 41%;
+        margin-top: 0;
+    }
+    @include bps.breakpoint(desktop-lg) {
+        width: 25%;
+    }
+}
+.checkout__col-2 {
+    width: 100%;
+    margin-top: 30px;
+    @include bps.breakpoint(tablet-lg) {
+        width: 300px;
+    }
+    @include bps.breakpoint(desktop-lg) {
+        width: 22%;
+        margin-top: 0;
+    }
+}
