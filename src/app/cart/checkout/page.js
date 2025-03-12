@@ -1,6 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import CheckoutCartItem from '@/components/Cart/CheckoutCartItem';
+import { ThreeDots } from 'react-loader-spinner';
+import { getNewPrice } from '@/utils/numberUtils';
+import { useCart } from '@/context/CartContext';
 import { useState } from 'react';
 
 const CheckoutPage = () => {
@@ -17,7 +21,16 @@ const CheckoutPage = () => {
 
     const [paymentMethod, setPaymentMethod] = useState(null);
     const [deliveryMethod, setDeliveryMethod] = useState(null);
-    const totalCost = 629.93;
+    const { cart, cartLoading } = useCart();
+    const totalCost = cart?.items
+        ?.reduce(
+            (sum, item) =>
+                sum +
+                getNewPrice(item.price, item.discountPercentage) *
+                    item.quantity,
+            0
+        )
+        .toFixed(2);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -184,17 +197,33 @@ const CheckoutPage = () => {
                         <h3 className='text-lg font-semibold mb-4'>
                             Your cart
                         </h3>
-                        <div className='border p-4 rounded mb-4'>
-                            <p className='text-gray-700'>
-                                T-Shirt Summer Vibes - $89.99
-                            </p>
-                            <p className='text-gray-700'>
-                                T-Shirt Summer Vibes - $89.99
-                            </p>
-                        </div>
+                        {/* Show loader while loading */}
+                        {cartLoading ? (
+                            <div className='text-center flex justify-center mt-4 mb-12'>
+                                <ThreeDots
+                                    visible={true}
+                                    height='80'
+                                    width='80'
+                                    color='#000'
+                                    radius='5'
+                                    ariaLabel='three-dots-loading'
+                                    wrapperStyle={{}}
+                                    wrapperClass=''
+                                />
+                            </div>
+                        ) : cart?.items?.length ? (
+                            <div>
+                                {cart?.items?.map((item, idx) => (
+                                    <CheckoutCartItem item={item} key={idx} />
+                                ))}
+                            </div>
+                        ) : (
+                            <p className='mb-4'>Empty Cart</p>
+                        )}
                         <div className='flex justify-between font-semibold text-lg'>
-                            <p>Total cost</p>
-                            <p>${totalCost}</p>
+                            <p className='mb-8'>Total cost</p>
+                            {` `}
+                            <p>${cart?.items?.length ? totalCost : 0.0}</p>
                         </div>
                     </div>
                 </div>
