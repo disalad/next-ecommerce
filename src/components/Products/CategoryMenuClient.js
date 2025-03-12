@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 const CategoryMenuClient = ({ currentCategory, categories }) => {
     const router = useRouter();
@@ -42,10 +43,6 @@ const CategoryMenuClient = ({ currentCategory, categories }) => {
         setIsDragging(false);
     };
 
-    const handleCategoryClick = (category) => {
-        router.push(`/products/category/${category.slug}`);
-    };
-
     const reorderedCategories = categories.sort((a, b) => {
         if (a.slug === currentCategory) return -1; // a comes first
         if (b.slug === currentCategory) return 1; // b comes first
@@ -77,7 +74,6 @@ const CategoryMenuClient = ({ currentCategory, categories }) => {
                 {reorderedCategories.map((category) => (
                     <div
                         key={category.slug}
-                        onClick={() => handleCategoryClick(category)}
                         className={`px-4 py-2 whitespace-nowrap rounded-full border border-gray-300 text-black hover:bg-gray-200 
                             ${
                                 category.slug === currentCategory
@@ -85,7 +81,9 @@ const CategoryMenuClient = ({ currentCategory, categories }) => {
                                     : ''
                             } `}
                     >
-                        {category.name}
+                        <Link href={`/products/category/${category.slug}`}>
+                            {category.name}
+                        </Link>
                     </div>
                 ))}
             </div>
