@@ -6,7 +6,7 @@ async function ProductPage({ params }) {
     const productData = await fetchProductData(id);
 
     return (
-        <div className='py-6 px-2 sm-md:p-8'>
+        <div className='py-6 px-2 sm-md:p-8 container mx-auto min-h-[70vh]'>
             <ProductItem product={productData} />
         </div>
     );
