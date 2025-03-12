@@ -40,6 +40,7 @@ export async function addItemToCart(newItem, userId) {
         console.log('Updated Cart:', cart);
         return cart;
     } else {
+        const productData = await fetchProductData(newItem.productId);
         // If no cart exists for the user, create a new cart
         const newCart = new Cart({
             userId,
@@ -47,6 +48,10 @@ export async function addItemToCart(newItem, userId) {
                 {
                     productId: newItem.productId,
                     quantity: newItem.quantity,
+                    title: productData.title,
+                    price: productData.price,
+                    discountPercentage: productData.discountPercentage,
+                    coverImage: productData.images[0],
                 },
             ],
         });
