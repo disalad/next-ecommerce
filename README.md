@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js eCommerce App
+
+## About The Project
+
+A modern eCommerce web application built with Next.js 15, providing a seamless
+shopping experience with user authentication, product browsing, and a shopping
+cart system.
+
+<img src="https://i.ibb.co/dw0Yk3Bh/1741773152681.png" alt="screenshot of the project">
+
+### Built With
+
+-   [Next.js 15](https://nextjs.org/)
+-   [Tailwind CSS](https://tailwindcss.com/)
+-   [NextAuth v5 (Beta)](https://next-auth.js.org/)
+-   [Mongoose](https://mongoosejs.com/)
 
 ## Getting Started
 
-First, run the development server:
+Follow these instructions to set up and run the project locally.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ensure you have the following installed:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+-   Node.js
+-   Yarn (package manager)
+-   MongoDB (local or cloud-based)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Installation
 
-## Learn More
+1. Clone the repository:
 
-To learn more about Next.js, take a look at the following resources:
+    ```sh
+    git clone https://github.com/disalad/next-ecommerce.git
+    cd next-ecommerce
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Install dependencies:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    ```sh
+    yarn install
+    ```
 
-## Deploy on Vercel
+3. Create a `.env.local` file in the root directory and configure your
+   environment variables:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    ```env
+    NEXTAUTH_SECRET=your_secret
+    MONGODB_URI=your_mongodb_connection_string
+    MONGODB_DB=your_mongodb_database_name
+    SALT_ROUNDS=Number of rounds for password hashing (e.g., 10)
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Start the development server:
+
+    ```sh
+    yarn dev
+    ```
+
+## Features
+
+-   **User Authentication** – Secure login and registration with NextAuth
+-   **Password Hashing** – User passwords are securely hashed using bcrypt, with
+    configurable salt rounds
+-   **Responsive UI** – Styled with Tailwind CSS for a seamless user experience
+-   **Infinite Scroll** – Load products dynamically as the user scrolls
+-   **Product Carousels** – Interactive sliders powered by SwiperJS
+-   **Shopping Cart** – Add, remove, and manage products in the cart
+-   **MongoDB Integration** – Store and retrieve data using Mongoose ORM
+
+## Contact
+
+Project Link:
+[https://github.com/disalad/next-ecommerce](https://github.com/disalad/next-ecommerce)
