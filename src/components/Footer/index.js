@@ -16,9 +16,9 @@ const Footer = () => {
                         <h6 className='flex items-center text-black font-light mb-8 text-lg'>
                             <MdStorefront className='w-11 h-9 mr-4 text-black' />
                             <span className='font-medium text-orange-500'>
-                                E
+                                Great
                             </span>
-                            -Shop
+                            Goodz
                         </h6>
                         <p className='text-sm leading-relaxed text-gray-600'>
                             House My Brand designs clothing for the young, the

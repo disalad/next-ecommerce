@@ -45,7 +45,10 @@ const Header = () => {
                 <div className='flex items-center space-x-2'>
                     <MdStorefront size={30} />
                     <span className='font-bold text-lg'>
-                        <Link href='/'>GreatGoodz</Link>
+                        <Link href='/'>
+                            <span className='text-orange-500'>Great</span>
+                            Goodz
+                        </Link>
                     </span>
                 </div>
 
