@@ -20,7 +20,7 @@ const Cart = () => {
     return (
         <div className='max-w-5xl mx-auto p-6'>
             <h2 className='text-2xl font-semibold mb-10'>Shopping Cart</h2>
-            <div className='grid grid-cols-5 gap-4 text-gray-500 font-semibold border-b pb-3'>
+            <div className='hidden md:grid grid-cols-5 gap-4 text-gray-500 font-semibold border-b pb-3'>
                 <span className='col-span-3'>Product</span>
                 <span className='col-span-1'>Amount</span>
                 <span className='col-span-1  '>Price</span>
@@ -46,19 +46,22 @@ const Cart = () => {
                     ))}
                 </div>
             )}
-            <div className='grid grid-cols-3 my-8 items-center'>
+            <div className='flex justify-evenly flex-row flex-wrap md:grid md:grid-cols-3 my-8 items-center w-full'>
                 <Link href='/products'>
-                    <button className='flex items-center gap-2 text-black font-semibold'>
-                        <IoMdArrowBack /> Continue Shopping
+                    <button className='flex items-center gap-2 text-black font-semibold mb-4 md:mb-0'>
+                        <IoMdArrowBack />{' '}
+                        <span className='inline-block sm:inline-block'>
+                            Continue Shopping
+                        </span>
                     </button>
                 </Link>
                 <input
                     type='text'
                     placeholder='Promo Code'
-                    className='border rounded-lg px-4 py-2'
+                    className='border rounded-lg px-4 py-2 hidden md:block w-3/4'
                 />
-                <div className='flex justify-end items-center gap-4'>
-                    <span className='font-semibold'>
+                <div className='flex flex-wrap md:flex-nowrap justify-center md:justify-end items-center gap-4 mb-4 md:mb-0 md:ml-2'>
+                    <span className='font-semibold whitespace-nowrap'>
                         Total cost <strong>${totalCost?.toFixed(2)}</strong>
                     </span>
                     <Link href='/cart/checkout'>

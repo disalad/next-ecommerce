@@ -65,16 +65,16 @@ function ProductsList({ limit = 15, category = null }) {
                             href={`/products/${product.id}`}
                             passHref
                         >
-                            <div className='p-4 border rounded hover:shadow-lg relative product-card'>
+                            <div className='p-4 flex flex-col border rounded hover:shadow-lg h-full relative product-card'>
                                 <img
                                     src={product.thumbnail}
                                     alt={product.title}
                                     className='w-full h-36 object-cover rounded'
                                 />
-                                <div className='text-sm text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis mt-2'>
+                                <div className='text-sm text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis flex-grow mt-2'>
                                     {product.title}
                                 </div>
-                                <div className='font-bold text-lg text-gray-900'>
+                                <div className='font-bold text-lg text-gray-900 flex-grow'>
                                     $
                                     {getNewPrice(
                                         product.price,

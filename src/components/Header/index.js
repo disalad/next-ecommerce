@@ -38,7 +38,7 @@ const Header = () => {
                         ? 'bg-transparent text-white border-none'
                         : 'bg-white text-gray-800'
                 }
-                flex items-center px-6 md:px-12`}
+                flex items-center px-4 sm:px-6 md:px-12`}
         >
             <div className='flex items-center w-full'>
                 {/* Logo */}
@@ -66,10 +66,7 @@ const Header = () => {
                 </nav>
 
                 {/* Icons and Mobile Menu Button */}
-                <div className='flex space-x-6 items-center ml-auto md:ml-0'>
-                    <button className='hover:text-gray-600'>
-                        <FiSearch size={21} />
-                    </button>
+                <div className='flex space-x-4 sm:space-x-6 items-center ml-auto md:ml-0'>
                     <Link href='/cart' className='hover:text-gray-600'>
                         <FiShoppingCart size={21} />
                     </Link>

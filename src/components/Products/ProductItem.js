@@ -19,7 +19,7 @@ const ProductPage = ({ product }) => {
     const { cart, refetchCart } = useCart();
     const { data: session } = useSession(); // To check if the user is logged in
     const { showAlert } = useAlertBox();
-    
+
     const { price, discountPercentage } = product;
     const productId = product.id;
 
@@ -53,20 +53,23 @@ const ProductPage = ({ product }) => {
     }, [cart]);
 
     return (
-        <div className='flex p-8'>
+        <div className='flex flex-col md:flex-row p-8'>
             {/* Image Slider */}
-            <div className='w-1/2 pr-2'>
+            <div className='w-full md:w-1/2 md:pr-2'>
                 <Swiper
                     navigation
                     pagination
                     modules={[Navigation, Pagination]}
                 >
                     {product.images.map((image, index) => (
-                        <SwiperSlide key={index}>
+                        <SwiperSlide
+                            key={index}
+                            className='aspect-w-1 aspect-h-1'
+                        >
                             <img
                                 src={image}
                                 alt={product.title}
-                                className='w-full h-96 object-cover rounded-lg'
+                                className='w-full object-cover rounded-lg'
                             />
                         </SwiperSlide>
                     ))}
@@ -74,7 +77,7 @@ const ProductPage = ({ product }) => {
             </div>
 
             {/* Product Details */}
-            <div className='w-1/2 pl-10'>
+            <div className='w-full md:w-1/2 mt-8 md:mt-0 sm:pl-10'>
                 <span className='bg-red-500 text-white px-2 py-1 text-sm rounded'>
                     {product.availabilityStatus}
                 </span>

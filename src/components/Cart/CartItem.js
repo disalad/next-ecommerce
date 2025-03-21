@@ -60,9 +60,9 @@ function CartItem({ item }) {
     return (
         <div
             key={item.productId}
-            className='grid grid-cols-5 gap-4 items-center py-4 border-b'
+            className='flex flex-col w-full max-w-[420] md:max-w-[100%] mx-auto md:grid md:grid-cols-5 gap-4 items-center py-4 border-b'
         >
-            <div className='col-span-3 flex items-center gap-4'>
+            <div className='md:col-span-3 flex flex-row w-full items-center justify-evenly md:justify-normal gap-4'>
                 <img
                     src={item.coverImage}
                     alt={item.title}
@@ -70,27 +70,39 @@ function CartItem({ item }) {
                 />
                 <span className='font-semibold'>{item.title}</span>
             </div>
-            <div className='col-span-1'>
-                <div className='flex items-center border rounded-lg max-w-fit'>
+            <div className='flex flex-row w-full items-center justify-evenly md:col-span-2 md:grid md:grid-cols-2'>
+                <div className='col-span-1'>
+                    <div className='flex items-center border rounded-lg max-w-fit'>
+                        <button
+                            className='px-3 py-1'
+                            onClick={() =>
+                                handleQuantityChange(item.productId, -1)
+                            }
+                        >
+                            -
+                        </button>
+                        <span className='px-4'>{item.quantity}</span>
+                        <button
+                            className='px-3 py-1'
+                            onClick={() =>
+                                handleQuantityChange(item.productId, 1)
+                            }
+                        >
+                            +
+                        </button>
+                    </div>
+                </div>
+                <div className='col-span-1 flex justify-between items-center'>
+                    <span>${(itemPrice * item.quantity).toFixed(2)}</span>
                     <button
-                        className='px-3 py-1'
-                        onClick={() => handleQuantityChange(item.productId, -1)}
+                        className='text-red-500 hidden md:block'
+                        onClick={() => handleProductRemoval(item.productId)}
                     >
-                        -
-                    </button>
-                    <span className='px-4'>{item.quantity}</span>
-                    <button
-                        className='px-3 py-1'
-                        onClick={() => handleQuantityChange(item.productId, 1)}
-                    >
-                        +
+                        &times;
                     </button>
                 </div>
-            </div>
-            <div className='col-span-1 flex justify-between items-center'>
-                <span>${(itemPrice * item.quantity).toFixed(2)}</span>
                 <button
-                    className='text-red-500'
+                    className='text-red-500 md:hidden'
                     onClick={() => handleProductRemoval(item.productId)}
                 >
                     &times;
